@@ -1,0 +1,480 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>        
+        <!-- META SECTION -->
+        <title>Anticuerpos | Salud Pública</title>            
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+        <!-- END META SECTION -->
+        
+        <!-- CSS INCLUDE -->   
+        {% block css %}     
+            <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}" />
+            <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome-animation.min.css' %}" />
+        {% endblock %}
+        <!-- EOF CSS INCLUDE -->                                      
+    </head>
+    <body>
+        <!-- START PAGE CONTAINER -->
+        <div class="page-container page-navigation-top">            
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+                
+                <!-- START X-NAVIGATION VERTICAL -->
+                <ul class="x-navigation x-navigation-horizontal">
+                    <li class="xn-logo">
+                        <a href="/accounts/profile/">Diagnóstico</a>
+                        <a href="#" class="x-navigation-control"></a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-thumb-tack"></span> <span class="xn-text">Datos del Paciente</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_paciente_add' %}"><span class="fa fa-list-alt"></span> Insertar Paciente</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-flask"></span> <span class="xn-text">Alertas Pacientes </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'anticuerpos_sld_app:buscarPorTest' %}"><span class="fa fa-list-alt"></span> Alertas pacientes por PCR</a></li>
+                        </ul>
+                    </li>  
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text"> Filtros y Reportes</span></a>
+                        <ul class="animated zoomIn">
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-filter"></span> Listados</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'anticuerpos_sld_app:todos_positivos' %}"><span class="fa fa-group"></span> Todos los positivos</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:testrapido' %}"><span class="fa fa-group"></span> Teste Rápido</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:kit' %}"><span class="fa fa-group"></span> WallTail</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:suma_positivos' %}"><span class="fa fa-group"></span> SUMA</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:pcr' %}"><span class="fa fa-group"></span> PCR</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'anticuerpos_sld_app:area_salud_positivos' %}"><span class="fa fa-filter"></span>Positivos área de salud</a></li>
+                        </ul>
+                    </li>      
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">Administración Diagnóstico</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_areasalud_changelist' %}"><span class="fa fa-list-alt"></span> Área de salud</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_condicion_changelist' %}"><span class="fa fa-list-alt"></span> Condición</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_labenvio_changelist' %}"><span class="fa fa-list-alt"></span> Laboratorio de envío</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_provincia_changelist' %}"><span class="fa fa-list-alt"></span> Provincias</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_municipio_changelist' %}"><span class="fa fa-list-alt"></span> Municipios</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_procedenciamuestra_changelist' %}"><span class="fa fa-list-alt"></span> Procedencia de la muestra</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_tipotest_changelist' %}"><span class="fa fa-list-alt"></span> Tipo test</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_tipomuestra_changelist' %}"><span class="fa fa-list-alt"></span> Tipo de muestra</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-wrench"></span> <span class="xn-text">Administración </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog"></span>Administración General</a></li>
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-envelope"></span> Usuarios y Grupos</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'admin:auth_user_changelist' %}"><span class="fa fa-user"></span> Usuarios</a></li>
+                                    <li><a href="{% url 'admin:auth_group_changelist' %}"><span class="fa fa-group"></span> Grupo</a></li>
+                                </ul>
+                            </li>
+                        </ul>    
+                    </li>          
+                    {% elif user.is_staff %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-thumb-tack"></span> <span class="xn-text">Datos del Paciente</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_paciente_add' %}"><span class="fa fa-list-alt"></span> Insertar Paciente</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-flask"></span> <span class="xn-text">Alertas Pacientes </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'anticuerpos_sld_app:buscarPorTest' %}"><span class="fa fa-list-alt"></span> Alertas pacientes por PCR</a></li>
+                        </ul>
+                    </li>  
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text"> Filtros y Reportes</span></a>
+                        <ul class="animated zoomIn">
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-filter"></span> Listados</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'anticuerpos_sld_app:todos_positivos' %}"><span class="fa fa-group"></span> Todos los positivos</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:testrapido' %}"><span class="fa fa-group"></span> Teste Rápido</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:kit' %}"><span class="fa fa-group"></span> WallTail</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:suma_positivos' %}"><span class="fa fa-group"></span> SUMA</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:pcr' %}"><span class="fa fa-group"></span> PCR</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'anticuerpos_sld_app:area_salud_positivos' %}"><span class="fa fa-filter"></span>Positivos área de salud</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-flask"></span> <span class="xn-text">Alertas Pacientes </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'anticuerpos_sld_app:buscarPorTest' %}"><span class="fa fa-list-alt"></span> Alertas pacientes por PCR</a></li>
+                        </ul>
+                    </li>  
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text"> Filtros y Reportes</span></a>
+                        <ul class="animated zoomIn">
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-filter"></span> Listados</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'anticuerpos_sld_app:todos_positivos' %}"><span class="fa fa-group"></span> Todos los positivos</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:testrapido' %}"><span class="fa fa-group"></span> Teste Rápido</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:kit' %}"><span class="fa fa-group"></span> WallTail</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:suma_positivos' %}"><span class="fa fa-group"></span> SUMA</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:pcr' %}"><span class="fa fa-group"></span> PCR</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'anticuerpos_sld_app:area_salud_positivos' %}"><span class="fa fa-filter"></span>Positivos área de salud</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <!-- SIGN OUT -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>                        
+                    </li> 
+                    <!-- END SIGN OUT -->                                        
+                </ul>
+                <!-- END X-NAVIGATION VERTICAL -->                     
+                
+                <!-- START BREADCRUMB -->
+                <!-- <ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Layouts</a></li>
+                    <li class="active">Navigation Top</li> 
+                </ul> -->
+                <!-- END BREADCRUMB -->                
+                
+                <div class="page-title">                    
+                    <h2><span></span></h2>
+                </div>                   
+                
+                <!-- PAGE CONTENT WRAPPER -->
+                <div class="page-content-wrap">                
+                    
+                    <!-- START WIDGETS -->                    
+                    <div class="row">
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET SLIDER -->
+                            <div class="widget widget-default widget-carousel">
+                                <div class="owl-carousel" id="owl-example">
+                                    <div>                                    
+                                        <div class="widget-title">Total de Test Rápido positivos</div>                                                                        
+                                        <div class="widget-subtitle"></div>
+                                        <div class="widget-int">{{ countTestRapido }}</div>
+                                    </div>
+                                    <div>                                    
+                                        <div class="widget-title">Total de WaiTai positivos</div>
+                                        <div class="widget-subtitle"></div>
+                                        <div class="widget-int">{{ countWaiTail }}</div>
+                                    </div>
+                                    <div>                                    
+                                        <div class="widget-title">Total de PCR positivos</div>
+                                        <div class="widget-subtitle"></div>
+                                        <div class="widget-int">{{ countPCR }}</div>
+                                    </div>
+                                    <div>                                    
+                                        <div class="widget-title">Total de SUMA positivos</div>
+                                        <div class="widget-subtitle"></div>
+                                        <div class="widget-int">{{ countSuma }}</div>
+                                    </div>
+                                </div>                            
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                             
+                            </div>         
+                            <!-- END WIDGET SLIDER -->
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET MESSAGES -->
+                            {% if allPositivoAnticuerpo %}
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='{% url 'anticuerpos_sld_app:buscarPorTest' %}';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-bell faa-ring animated"></span>
+                                </div>                             
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ cantidadPCR }}</div>
+                                    <div class="widget-title">Pacientes por PCR</div>
+                                    <div class="widget-subtitle">Nuevas Notificaciones</div>
+                                </div>      
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>
+                            </div>               
+                            {% else %}
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='{% url 'anticuerpos_sld_app:buscarPorTest' %}';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-bell faa-ring animated"></span>
+                                </div>                             
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ cantidadPCR }}</div>
+                                    <div class="widget-title">Pacientes por PCR</div>
+                                    <div class="widget-subtitle">Nuevas Notificaciones</div>
+                                </div>      
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>
+                            </div>         
+                            {% endif %}
+                            <!-- END WIDGET MESSAGES -->
+                            
+                        </div>
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET REGISTRED -->
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='{% url 'anticuerpos_sld_app:buscarPorTest' %}';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-users"></span>
+                                </div>
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ allPositivoAnticuerpo }}</div>
+                                    <div class="widget-title">Total de Pacientes</div>
+                                    <div class="widget-subtitle">positivos</div>
+                                </div>
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                            
+                            </div>                            
+                            <!-- END WIDGET REGISTRED -->
+                            
+                        </div>
+                        <!-- <div class="col-md-3">
+                            <div class="widget widget-default widget-item-icon" onclick="location.href='{% url 'admin:auth_user_changelist' %}';">
+                                <div class="widget-item-left">
+                                    <span class="fa fa-user"></span>
+                                </div>
+                                <div class="widget-data">
+                                    <div class="widget-int num-count">{{ countUser }}</div>
+                                    <div class="widget-title">Usuarios Registrados</div>
+                                    <div class="widget-subtitle">en este sitio</div>
+                                </div>
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="top" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                            
+                            </div>                
+                        </div> -->
+                        <div class="col-md-3">
+                            
+                            <!-- START WIDGET CLOCK -->
+                            <div class="widget widget-info widget-padding-sm">
+                                <div class="widget-big-int plugin-clock">00:00</div>                            
+                                <div class="widget-subtitle plugin-date">Cargando...</div>
+                                <div class="widget-controls">                                
+                                    <a href="#" class="widget-control-right widget-remove" data-toggle="tooltip" data-placement="left" title="Remove Widget"><span class="fa fa-times"></span></a>
+                                </div>                            
+                                <div class="widget-buttons widget-c3">
+                                    <div class="col">
+                                        <a href="#"><span class="fa fa-clock-o"></span></a>
+                                    </div>
+                                    <div class="col">
+                                        <a href="/accounts/profile/expireContract/"><span class="fa fa-bell"></span></a><span class=" pull-top label label-danger">{{ allOldContract }}</span>
+                                    </div>
+                                    <div class="col">
+                                        <a href="#"><span class="fa fa-calendar"></span></a>
+                                    </div>
+                                </div>                            
+                            </div>                        
+                            <!-- END WIDGET CLOCK -->
+                            
+                        </div>
+                    </div>
+                    <!-- END WIDGETS -->                    
+                </div>
+                <!-- PAGE CONTENT WRAPPER -->  
+                <!-- START TYPOGRAPHY -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Cantidad de Positivos por Municipios</h3>                                
+                            </div>
+                            <div class="panel-body">
+                                <div id="morris-donut-municipios" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="col-md-6">    
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Cantidad de Positivos por Áreas de salud</h3>                                
+                            </div>
+                            <div class="panel-body">  
+                                <!-- <div id="pie-chart0" style="height: 300px;"></div> -->
+                                <canvas id="pie-chart0" style="height: 300px;"></canvas>
+                                <!-- <div id="morris-donut-area-salud-positivos" style="height: 300px;"></div> -->
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+                <!-- END TYPOGRAPHY -->                    
+            </div>            
+            <!-- END PAGE CONTENT -->
+        </div>
+        <!-- END PAGE CONTAINER -->
+
+        <!-- MESSAGE BOX-->
+        <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
+            <div class="mb-container">
+                <div class="mb-middle">
+                    <div class="mb-title"><span class="fa fa-sign-out"></span> Salir de la <strong>Aplicación</strong> ?</div>
+                    <div class="mb-content">
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+                        <p>Esta seguro que desea salir de la aplicación ?</p>                    
+                        <p>Presione No para seguir trabajando. Presione Si para salir.</p>
+                    </div>
+                    <div class="mb-footer">
+                        <div class="pull-right">
+                            <a href="/logout/" class="btn btn-success btn-lg">Si</a>
+                            <button class="btn btn-default btn-lg mb-control-close">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END MESSAGE BOX-->
+
+        <!-- START PRELOADS -->
+        <audio id="audio-alert" src="{% static 'audio/alert.mp3' %}" preload="auto"></audio>
+        <audio id="audio-fail" src="{% static 'audio/fail.mp3' %}" preload="auto"></audio>
+        <!-- END PRELOADS -->               
+
+    <!-- START SCRIPTS -->
+    {% block script %}
+        <!-- START PLUGINS -->
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js' %}"></script>       
+        <!-- END PLUGINS -->
+
+        <!-- THIS PAGE PLUGINS -->
+        <script type="text/javascript" src="{% static 'js/plugins/icheck/icheck.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/scrolltotop/scrolltopcontrol.js' %}"></script>
+        
+        <script type="text/javascript" src="{% static 'js/plugins/morris/raphael-min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/morris/morris.min.js' %}"></script>       
+        <script type="text/javascript" src="{% static 'js/plugins/rickshaw/d3.v3.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/rickshaw/rickshaw.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>                
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-datepicker.js' %}"></script>                
+        <script type="text/javascript" src="{% static 'js/plugins/owl/owl.carousel.min.js' %}"></script>                 
+        
+        <script type="text/javascript" src="{% static 'js/plugins/moment.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/daterangepicker/daterangepicker.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/jquery.noty.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/layouts/topRight.js' %}"></script>            
+            
+        <script type="text/javascript" src="{% static 'js/plugins/noty/themes/default.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/push-notification/push.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/morris/raphael-min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/morris/morris.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/Chart.js/Chart.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/jquery.noty.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/layouts/topRight.js' %}"></script> 
+        <script type="text/javascript" src="{% static 'js/plugins/noty/themes/default.js' %}"></script>      
+        <!-- END PAGE PLUGINS -->       
+
+        <!-- START TEMPLATE -->
+        <!-- <script type="text/javascript" src="{% static 'js/settings.js' %}"></script> -->
+        <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>        
+        <script type="text/javascript" src="{% static 'js/actions.js' %}"></script>
+                
+        <!-- END TEMPLATE -->
+        <script>
+            Push.create("Hoy tienes {{cantidadPCR}} pcr por hacer", {
+                body: "Regularmente se hacen pcr, en el apartado de 'Alertas Pacientes' estan los usuarios por tipo de test, para hacer pcr",
+                icon: '{% static 'img/push-notification/push-notification.png' %}',
+                /*timeout: 4000,*/
+                onClick: function () {
+                    window.focus();
+                    this.close();
+                }
+            });      
+        </script>
+        
+        <!-- <script>
+            Push.create("PCR", {
+                body: "Regularmente se hacen PCR, en el apartado de 'Alertas Pacientes' estan los usuarios por tipo de test para hacer pcr",
+                icon: '{% static 'img/push-notification/push-notification.png' %}',
+                /*timeout: 4000,*/
+                onClick: function () {
+                    window.focus();
+                    this.close();
+                }
+            });                
+        </script> -->
+        
+        <script>
+            var morrisCharts = function() {
+                Morris.Donut({
+                    element: 'morris-donut-municipios',
+                    data: {{ municipiosPositivos|safe }},
+                    colors: ['#95B75D', '#1caf9a', '#FEA223', '#E04B4A', '#656d78', '#2f323a', '#57a9a8', '#a4ce0e']
+                });
+                Morris.Donut({
+                    element: 'morris-donut-area-salud-positivos',
+                    data: {{ positivosData|safe }},
+                    colors: ['#95B75D', '#1caf9a', '#FEA223', '#E04B4A', '#656d78', '#2f323a', '#57a9a8', '#a4ce0e']
+                });
+            }();
+        </script>
+        <script>
+            var ctx0 = document.getElementById('pie-chart0').getContext('2d');
+            var color = Chart.helpers.color;
+            function dynamicColors() {
+                    var r = Math.floor(Math.random() * 255);
+                    var g = Math.floor(Math.random() * 255);
+                    var b = Math.floor(Math.random() * 255);
+                return "rgba(" + r + "," + g + "," + b + ", 0.5)";
+            };
+            function poolColors(a) {
+                    var pool = [];
+                    for(i = 0; i < a; i++) {
+                        pool.push(dynamicColors());
+                    }
+                    return pool;
+            };
+            var myChartPie = new Chart(ctx0, {
+                    type: 'line',
+                    data: {
+                        labels: {{ areasSaludLabel|safe }},
+                        datasets: [{
+                            label: 'Total de positivos',
+                            data: {{ positivosData|safe }},
+                            backgroundColor: poolColors({{ positivosData|length }}),
+                            borderColor: poolColors({{ positivosData|length }}),
+                            borderWidth: 2,
+                            /*fill: false,
+                            borderDash: [5, 5],*/
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        },
+                        legend:false
+                    }
+                });
+        </script>
+             
+    {% endblock %}
+    <!-- END SCRIPTS -->         
+    </body>
+</html>

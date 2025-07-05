@@ -1,0 +1,348 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>        
+        <!-- META SECTION -->
+        <title>Anticuerpos | Salud Pública</title>            
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon" />
+        <!-- END META SECTION -->
+        
+        <!-- CSS INCLUDE -->   
+        {% block css %}     
+            <link rel="stylesheet" type="text/css" id="theme" href="{% static 'css/theme-default.css' %}" />
+            <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome-animation.min.css' %}" />
+        {% endblock %}
+        <!-- EOF CSS INCLUDE -->                                      
+    </head>
+    <body>
+        <!-- START PAGE CONTAINER -->
+        <div class="page-container page-navigation-top">            
+            <!-- PAGE CONTENT -->
+            <div class="page-content">
+                
+                <!-- START X-NAVIGATION VERTICAL -->
+                <ul class="x-navigation x-navigation-horizontal">
+                    <li class="xn-logo">
+                        <a href="/accounts/profile/">Diagnóstico</a>
+                        <a href="#" class="x-navigation-control"></a>
+                    </li>
+                    {% if user.is_superuser %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-thumb-tack"></span> <span class="xn-text">Datos del Paciente</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_paciente_add' %}"><span class="fa fa-list-alt"></span> Insertar Paciente</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-flask"></span> <span class="xn-text">Alertas Pacientes </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'anticuerpos_sld_app:buscarPorTest' %}"><span class="fa fa-list-alt"></span> Alertas pacientes por PCR</a></li>
+                        </ul>
+                    </li>  
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text"> Filtros y Reportes</span></a>
+                        <ul class="animated zoomIn">
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-filter"></span> Listados</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'anticuerpos_sld_app:todos_positivos' %}"><span class="fa fa-group"></span> Todos los positivos</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:testrapido' %}"><span class="fa fa-group"></span> Teste Rápido</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:kit' %}"><span class="fa fa-group"></span> WallTail</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:suma_positivos' %}"><span class="fa fa-group"></span> SUMA</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:pcr' %}"><span class="fa fa-group"></span> PCR</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'anticuerpos_sld_app:area_salud_positivos' %}"><span class="fa fa-filter"></span>Positivos área de salud</a></li>
+                        </ul>
+                    </li>      
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-dashboard"></span> <span class="xn-text">Administración Diagnóstico</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_areasalud_changelist' %}"><span class="fa fa-list-alt"></span> Área de salud</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_condicion_changelist' %}"><span class="fa fa-list-alt"></span> Condición</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_labenvio_changelist' %}"><span class="fa fa-list-alt"></span> Laboratorio de envío</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_provincia_changelist' %}"><span class="fa fa-list-alt"></span> Provincias</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_municipio_changelist' %}"><span class="fa fa-list-alt"></span> Municipios</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_procedenciamuestra_changelist' %}"><span class="fa fa-list-alt"></span> Procedencia de la muestra</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_tipotest_changelist' %}"><span class="fa fa-list-alt"></span> Tipo test</a></li>
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_tipomuestra_changelist' %}"><span class="fa fa-list-alt"></span> Tipo de muestra</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-wrench"></span> <span class="xn-text">Administración </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:index' %}"><span class="fa fa-cog"></span>Administración General</a></li>
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-envelope"></span> Usuarios y Grupos</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'admin:auth_user_changelist' %}"><span class="fa fa-user"></span> Usuarios</a></li>
+                                    <li><a href="{% url 'admin:auth_group_changelist' %}"><span class="fa fa-group"></span> Grupo</a></li>
+                                </ul>
+                            </li>
+                        </ul>    
+                    </li>          
+                    {% elif user.is_staff %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-thumb-tack"></span> <span class="xn-text">Datos del Paciente</span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'admin:anticuerpos_sld_app_paciente_add' %}"><span class="fa fa-list-alt"></span> Insertar Paciente</a></li>
+                        </ul>
+                    </li>
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-flask"></span> <span class="xn-text">Alertas Pacientes </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'anticuerpos_sld_app:buscarPorTest' %}"><span class="fa fa-list-alt"></span> Alertas pacientes por PCR</a></li>
+                        </ul>
+                    </li>  
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text"> Filtros y Reportes</span></a>
+                        <ul class="animated zoomIn">
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-filter"></span> Listados</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'anticuerpos_sld_app:todos_positivos' %}"><span class="fa fa-group"></span> Todos los positivos</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:testrapido' %}"><span class="fa fa-group"></span> Teste Rápido</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:kit' %}"><span class="fa fa-group"></span> WallTail</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:suma_positivos' %}"><span class="fa fa-group"></span> SUMA</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:pcr' %}"><span class="fa fa-group"></span> PCR</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'anticuerpos_sld_app:area_salud_positivos' %}"><span class="fa fa-filter"></span>Positivos área de salud</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-flask"></span> <span class="xn-text">Alertas Pacientes </span></a>
+                        <ul class="animated zoomIn">
+                            <li><a href="{% url 'anticuerpos_sld_app:buscarPorTest' %}"><span class="fa fa-list-alt"></span> Alertas pacientes por PCR</a></li>
+                        </ul>
+                    </li>  
+                    <li class="xn-openable">
+                        <a href="#"><span class="fa fa-file-text-o"></span> <span class="xn-text"> Filtros y Reportes</span></a>
+                        <ul class="animated zoomIn">
+                            <li class="xn-openable">
+                                <a href="#"><span class="fa fa-filter"></span> Listados</a>
+                                <ul class="animated zoomIn">
+                                    <li><a href="{% url 'anticuerpos_sld_app:todos_positivos' %}"><span class="fa fa-group"></span> Todos los positivos</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:testrapido' %}"><span class="fa fa-group"></span> Teste Rápido</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:kit' %}"><span class="fa fa-group"></span> WallTail</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:suma_positivos' %}"><span class="fa fa-group"></span> SUMA</a></li>
+                                    <li><a href="{% url 'anticuerpos_sld_app:pcr' %}"><span class="fa fa-group"></span> PCR</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{% url 'anticuerpos_sld_app:area_salud_positivos' %}"><span class="fa fa-filter"></span>Positivos área de salud</a></li>
+                        </ul>
+                    </li>
+                    {% endif %}
+                    <!-- SIGN OUT -->
+                    <li class="xn-icon-button pull-right">
+                        <a href="#" class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>                        
+                    </li> 
+                    <!-- END SIGN OUT -->                                        
+                </ul>
+                <!-- END X-NAVIGATION VERTICAL -->                     
+                
+                <!-- START BREADCRUMB -->
+                <!-- <ul class="breadcrumb">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Layouts</a></li>
+                    <li class="active">Navigation Top</li> 
+                </ul> -->
+                <!-- END BREADCRUMB -->                
+                
+                <div class="page-title">                    
+                    <h2><span></span></h2>
+                </div>                   
+                <!-- PAGE CONTENT WRAPPER -->  
+                <!-- START TYPOGRAPHY -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="form-group" method="get" action="{% url 'anticuerpos_sld_app:buscarPorTest' %}"> 
+                            <div class="col-md-11">
+                            <select name="test" id="test" class="form-control select" data-live-search="true" title="Seleccione un tipo de test" required >
+                                <option value="">
+                                     Seleccione un tipo de test
+                                </option>
+                                    {% if allTipoTest %}
+                                    {% for a in allTipoTest %}
+                                    <option value="{{ a }}">
+                                        {{ a }}
+                                    </option>
+                                    {% endfor %}
+                                    {% endif %}
+                                    </select>
+                            </div>
+                            <span class="input-group-btn">
+                                                    <button class="btn btn-info btn-group" title="Buscar" type="submit">
+                                     <i class="fa fa-search"></i>
+                                    </button>
+                                                </span>
+                        </form>      
+                        <br>
+                        <br>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                    <h3 class="panel-title">Exportar Datos</h3>
+                                    <div class="btn-group pull-right">
+                                        <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i> Exportar Datos</button>
+                                        <ul class="dropdown-menu">
+                                            <!-- <li><a href="#" onClick ="$('#customers2').tableExport({type:'json',escape:'false'});"><img src="{% static 'img/icons/json.png' %}" width="24"/> JSON</a></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'json',escape:'false',ignoreColumn:'[2,3]'});"><img src="{% static 'img/icons/json.png' %}" width="24"/> JSON (ignoreColumn)</a></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'json',escape:'true'});"><img src="{% static 'img/icons/json.png' %}" width="24"/> JSON (with Escape)</a></li>
+                                        <li class="divider"></li> -->
+                                        <!-- <li><a href="#" onClick ="$('#customers2').tableExport({type:'xml',escape:'false'});"><img src="{% static 'img/icons/xml.png' %}" width="24"/> XML</a></li> -->
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'sql'});"><img src="{% static 'img/icons/sql.png' %}" width="24"/> SQL</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'csv',escape:'false'});"><img src="{% static 'img/icons/csv.png' %}" width="24"/> CSV</a></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'txt',escape:'false'});"><img src="{% static 'img/icons/txt.png' %}" width="24"/> TXT</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'excel',escape:'false'});"><img src="{% static 'img/icons/xls.png' %}" width="24"/> XLS</a></li>
+                                        <!-- <li><a href="#" onClick ="$('#customers2').tableExport({type:'doc',escape:'false'});"><img src="{% static 'img/icons/word.png' %}" width="24"/> Word</a></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'powerpoint',escape:'false'});"><img src="{% static 'img/icons/ppt.png' %}" width="24"/> PowerPoint</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'png',escape:'false'});"><img src="{% static 'img/icons/png.png' %}" width="24"/> PNG</a></li>
+                                        <li><a href="#" onClick ="$('#customers2').tableExport({type:'pdf',escape:'false'});"><img src="{% static 'img/icons/pdf.png' %}" width="24"/> PDF</a></li> -->
+                                        </ul>
+                                    </div>   
+                                                
+                                    
+                            </div>
+                            <div class="panel-body">  
+                                <table id="customers2" class="table table-condensed datatable">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombres y Apellidos</th>
+                                                <th>Edad</th>
+                                                <th>Sexo</th>
+                                                <th>CI/Pasaporte</th>
+                                                <th>Dirección</th>
+                                                <th>Área salud</th>
+                                                <th>Municipio</th>
+                                                <th>Provincia</th>
+                                                <th>condicion</th>
+                                                <th>fis</th>
+                                                <th>ftm</th>
+                                                <th>Tipo muestra</th>
+                                                <th>Procedencia muestra</th>
+                                                <th>Laboratorio envío</th>
+                                                <th>Fecha envío muestra</th>
+                                                <th>Resultado</th>
+                                                <th>Fecha recibido</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for noCorridas, codigo, idSuma, idLab, tipoTest, nombresApellidos, edad, sexo, carIdentidad, direccion, areaSalud, municipio, provincia, condicion, paisProcedencia, fis, fecha, tipoMuestra, procMuestra, labEnvio, fechaEnvio, resultado, fechaRecibido, observacion in allAnticuerpos %}
+                                            <tr>
+                                                <td>{{ nombresApellidos }}</td>
+                                                <td>{{ edad }}</td>
+                                                <td>{{ sexo }}</td>
+                                                <td>{{ carIdentidad }}</td>
+                                                <td>{{ direccion }}</td>
+                                                <td>{{ areaSalud }}</td>
+                                                <td>{{ municipio }}</td>
+                                                <td>{{ provincia }}</td>
+                                                <td>{{ condicion }}</td>
+                                                <td>{{ fis }}</td>
+                                                <td>{{ fecha }}</td>
+                                                <td>{{ tipoMuestra }}</td>
+                                                <td>{{ procMuestra }}</td>
+                                                <td>{{ labEnvio }}</td>
+                                                <td>{{ fechaEnvio }}</td>
+                                                <td>{{ resultado }}</td>
+                                                <td>{{ fechaRecibido }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>                       
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+                <!-- END TYPOGRAPHY -->                    
+            </div>            
+            <!-- END PAGE CONTENT -->
+        </div>
+        <!-- END PAGE CONTAINER -->
+
+        <!-- MESSAGE BOX-->
+        <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
+            <div class="mb-container">
+                <div class="mb-middle">
+                    <div class="mb-title"><span class="fa fa-sign-out"></span> Salir de la <strong>Aplicación</strong> ?</div>
+                    <div class="mb-content">
+                        <p><strong>{{ user.first_name }} {{ user.last_name }}</strong></p>
+                        <p>Esta seguro que desea salir de la aplicación ?</p>                    
+                        <p>Presione No para seguir trabajando. Presione Si para salir.</p>
+                    </div>
+                    <div class="mb-footer">
+                        <div class="pull-right">
+                            <a href="/logout/" class="btn btn-success btn-lg">Si</a>
+                            <button class="btn btn-default btn-lg mb-control-close">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END MESSAGE BOX-->
+
+        <!-- START PRELOADS -->
+        <audio id="audio-alert" src="{% static 'audio/alert.mp3' %}" preload="auto"></audio>
+        <audio id="audio-fail" src="{% static 'audio/fail.mp3' %}" preload="auto"></audio>
+        <!-- END PRELOADS -->               
+
+    <!-- START SCRIPTS -->
+    {% block script %}
+        <!-- START PLUGINS -->
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jquery/jquery-ui.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap.min.js' %}"></script>       
+        <!-- END PLUGINS -->
+
+        <!-- THIS PAGE PLUGINS -->
+        <script type="text/javascript" src="{% static 'js/plugins/icheck/icheck.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/scrolltotop/scrolltopcontrol.js' %}"></script>
+        
+        <script type="text/javascript" src="{% static 'js/plugins/morris/raphael-min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/morris/morris.min.js' %}"></script>       
+        <script type="text/javascript" src="{% static 'js/plugins/rickshaw/d3.v3.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/rickshaw/rickshaw.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>                
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-datepicker.js' %}"></script>                
+        <script type="text/javascript" src="{% static 'js/plugins/owl/owl.carousel.min.js' %}"></script>                 
+        
+        <script type="text/javascript" src="{% static 'js/plugins/moment.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/daterangepicker/daterangepicker.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/jquery.noty.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/noty/layouts/topRight.js' %}"></script>            
+            
+        <script type="text/javascript" src="{% static 'js/plugins/noty/themes/default.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/push-notification/push.js' %}"></script>
+
+        <script type="text/javascript" src="{% static 'js/plugins/datatables/jquery.dataTables.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/tableexport/tableExport.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/tableexport/jquery.base64.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/tableexport/html2canvas.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/tableexport/jspdf/libs/sprintf.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/tableexport/jspdf/jspdf.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/tableexport/jspdf/libs/base64.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/plugins/bootstrap/bootstrap-select.js' %}"></script>
+        <!-- Datatables -->
+        
+        <!-- END PAGE PLUGINS -->       
+
+        <!-- START TEMPLATE -->
+        <!-- <script type="text/javascript" src="{% static 'js/settings.js' %}"></script> -->
+        <script type="text/javascript" src="{% static 'js/plugins.js' %}"></script>        
+        <script type="text/javascript" src="{% static 'js/actions.js' %}"></script>        
+        <!-- END TEMPLATE -->
+                    
+    {% endblock %}
+    <!-- END SCRIPTS -->         
+    </body>
+</html>
